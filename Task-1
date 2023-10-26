@@ -32,3 +32,41 @@ int main() {
     vector<string>out = split(target, delimiter);
     return 0;
 }
+========================================================================
+========================================================================
+// problem-9 => Hassan
+#include <bits/stdc++.h>
+#include <string>
+#define Hassan ios_base::sync_with_stdio(false); cin.tie(nullptr);
+using namespace std;
+bool bears(int n) {
+    if (n == 42) {
+        return true; 
+    }
+    if (n < 42) {
+        return false; 
+    }
+    if (n % 2 == 0 && bears(n / 2)) {
+        return true;
+    }
+    if ((n % 10) * ((n % 100) / 10) != 0 && bears(n - ((n % 10) * ((n % 100) / 10)))) {
+        return true;
+    }
+    if (n % 5 == 0 && bears(n - 42)) {
+        return true;
+    }
+    return false; 
+}
+int main() {
+    Hassan;
+    int n;
+    cout << "Enter the number of bears: ";
+    cin >> n;
+    if (bears(n)){
+        cout<<"You have reached the goal!"<<endl;
+    }
+    else{
+        cout<<"You haven't reached the goal!"<<endl;
+    }
+    return 0;
+}
