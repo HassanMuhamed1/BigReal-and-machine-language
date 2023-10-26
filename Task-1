@@ -67,4 +67,24 @@ int main() {
     }
     return 0;
 }
+===============================================================
+===============================================================
+// problem-6-a => Hassan
+#include <bits/stdc++.h>
+using namespace std;
+void binaryPrint(int n){
+    if(n>1){
+        binaryPrint(n/2);
+    }
+    cout<<n%2;
+}
+int main() {
+    int n;
+    cout<<"Enter decimal num: ";
+    cin>>n;
+    cout<<"Binary: ";
+    binaryPrint(n);
+
+    return 0;
+}
 
