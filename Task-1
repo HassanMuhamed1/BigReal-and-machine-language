@@ -4,23 +4,31 @@
 #define Hassan ios_base::sync_with_stdio(false); cin.tie(nullptr);
 using namespace std;
 
-void split(string target, string delimiter){
-    string res;
+vector<string> split(string target, string delimiter){
+    vector<string>res;
+    string s;
     for (int i = 0; i < target.size(); ++i) {
-        if(target[i]==',' || target[i]==' ')res+=delimiter;
-        else if(i==0 || i==target.size())res+='"';
-        else{
-            res+=target[i];
+        if(target[i]==',' || target[i]==' ')res.push_back(delimiter);
+        else if(i==0 || i==target.size()){
+            s+='"';
+            res.push_back(s);
+            s.clear();
         }
-
+        else{
+            s+=target[i];
+            res.push_back(s);
+            s.clear();
+        }
     }
-    cout<<res;
+    for (vector<string>::iterator it=res.begin() ; it!=res.end() ; it++) {
+        cout<<*it;
+    }
 }
 int main() {
     Hassan;
     string target , delimiter;
     getline(cin ,target);
     getline(cin ,delimiter);
-    split(target, delimiter);
+    vector<string>out = split(target, delimiter);
     return 0;
 }
