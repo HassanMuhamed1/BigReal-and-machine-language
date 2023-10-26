@@ -36,15 +36,13 @@ int main() {
 ========================================================================
 // problem-9 => Hassan
 #include <bits/stdc++.h>
-#include <string>
-#define Hassan ios_base::sync_with_stdio(false); cin.tie(nullptr);
 using namespace std;
 bool bears(int n) {
     if (n == 42) {
-        return true; 
+        return true;
     }
     if (n < 42) {
-        return false; 
+        return false;
     }
     if (n % 2 == 0 && bears(n / 2)) {
         return true;
@@ -55,10 +53,9 @@ bool bears(int n) {
     if (n % 5 == 0 && bears(n - 42)) {
         return true;
     }
-    return false; 
+    return false;
 }
 int main() {
-    Hassan;
     int n;
     cout << "Enter the number of bears: ";
     cin >> n;
@@ -70,3 +67,4 @@ int main() {
     }
     return 0;
 }
+
