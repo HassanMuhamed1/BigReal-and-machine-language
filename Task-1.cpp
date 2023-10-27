@@ -1,4 +1,12 @@
 // Problem-3 =>Hassan
+// File: problem 3,6(a,b),9.cpp
+// Purpose: ………
+// Author: Hassan Muhammed Hassan
+// Section: S19
+// ID: 20220115
+// TA: ……………………
+// Date: 27 Oct 2023
+
 #include <bits/stdc++.h>
 #include <string>
 #define Hassan ios_base::sync_with_stdio(false); cin.tie(nullptr);
