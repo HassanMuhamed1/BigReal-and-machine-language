@@ -117,4 +117,70 @@ int main() {
 
     return 0;
 }
+======================================================================
+    //problem 7
+    
+#include <bits/stdc++.h>
+using namespace std;
+struct dominoT
+{
+    int leftDots;
+    int rightDots;
+};
+vector<dominoT>Solve;
+bool x(dominoT d , int size , vector<dominoT>v){
+    if(size == 0){
+        return true;
+    }
+    for (int i = 0; i <size ; ++i) {
+        if(d.rightDots == v[i].leftDots ){
+            Solve.push_back(v[i]);
+            vector<dominoT>temp = v;
+            temp.erase(temp.begin()+i);
+            if(x(Solve.back() , size-1 , temp)){
+                return true;
+            }
+            else{
+                Solve.pop_back();
+            }
+        }
+    }
+    return false;
+}
+int main (){
+    int n;
+    cin>>n;
+    vector<dominoT>input(n);
+    vector<dominoT>temp(n);
+    for(int i=0 ; i<n ; i++){
+        cin>>input[i].leftDots;
+        cin>>input[i].rightDots;
+    }
+    bool check = false;
+    for(int i=0 ; i<n ; i++){
+        Solve.push_back(input[i]);
+        temp = input;
+        temp.erase(temp.begin()+i);
+        if(x(Solve.back() , n-1  , temp)){
+            check = true;
+            break;
+        }
+        else{
+            Solve.clear();
+        }
+    }
+    if(check){
+        cout<<"True\n";
+        for (int i = 0; i < n; ++i) {
+            if(i<n-1)
+            cout<<Solve[i].leftDots<<"|"<<Solve[i].rightDots<<" - ";
+            else
+                cout<<Solve[i].leftDots<<"|"<<Solve[i].rightDots;
+        }
+    }
+    else{
+        cout<<"False\n";
+    }
+}
+
 
