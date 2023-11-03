@@ -10,6 +10,9 @@ public:
     bool isValidReal(string real);
     BigReal(string real);
     string operator +(const BigReal & r1);
+    bool operator ==(const BigReal & r1);
+    bool operator <(const BigReal & r1);
+    bool operator >(const BigReal &r1);
     BigReal operator <<(const BigReal & r1) const;
     void print();
     friend bool isValidReal(string real);
@@ -96,11 +99,109 @@ string BigReal::operator+(const BigReal &r1) {
     if (sign == '-' && r1.sign == '-') {
         result1.insert(result1.begin(), '-');
     }
-    return (result1+'.'+result2);
+    return ( result1+'.'+result2);
+}
+bool BigReal::operator==(const BigReal &r1) {
+    if (sign == r1.sign) {
+        if ((integer.size() == r1.integer.size()) && (fraction.size() == r1.fraction.size())) {
+            for (int i = 0; i < integer.size(); i++) {
+                if (integer[i] != r1.integer[i]) {
+                    return false;
+                }
+            }
+            for (int i = 0; i < fraction.size(); i++) {
+                if (fraction[i] != r1.fraction[i]) {
+                    return false;
+                }
+            }
+        } else {
+            return false; // Return false for the case where the integer and fraction parts have different sizes
+        }
+        return true; // Return true if all comparisons pass
+    }
+    return false; // Return false if the signs are not equal
+}
+bool BigReal::operator<(const BigReal &r1)
+{
+    // Check the signs
+    if (sign != r1.sign)
+    {
+        // If signs are different, the one with the negative sign is smaller
+        return (sign == '-');
+    }
+    else
+    {
+        // If signs are the same, compare the integer parts
+        if (integer.length() != r1.integer.length())
+        {
+            // If lengths are different, the one with the longer integer part is larger
+            return (integer.length() < r1.integer.length());
+        }
+        else
+        {
+            // If lengths are the same, compare lexicographically
+            if (integer != r1.integer)
+            {
+                // If integer parts are different, compare them
+                return (integer < r1.integer);
+            }
+            else
+            {
+                // If integer parts are the same, compare the fraction parts
+                // Pad the shorter fraction with zeros to compare lexicographically
+                string paddedFraction = fraction + string(max(0, (int)r1.fraction.length() - (int)fraction.length()), '0');
+                string paddedR1Fraction = r1.fraction + string(max(0, (int)fraction.length() - (int)r1.fraction.length()), '0');
+
+                return (paddedFraction < paddedR1Fraction);
+            }
+        }
+    }
+}
+bool BigReal::operator>(const BigReal &r1)
+{
+    // Check the signs
+    if (sign != r1.sign)
+    {
+        // If signs are different, the one with the positive sign is larger
+        return (sign == '+');
+    }
+    else
+    {
+        // If signs are the same, compare the integer parts
+        if (integer.length() != r1.integer.length())
+        {
+            // If lengths are different, the one with the longer integer part is larger
+            return (integer.length() > r1.integer.length());
+        }
+        else
+        {
+            // If lengths are the same, compare lexicographically
+            if (integer != r1.integer)
+            {
+                // If integer parts are different, compare them
+                return (integer > r1.integer);
+            }
+            else
+            {
+                // If integer parts are the same, compare the fraction parts
+                // Pad the shorter fraction with zeros to compare lexicographically
+                string paddedFraction = fraction + string(max(0, (int)r1.fraction.length() - (int)fraction.length()), '0');
+                string paddedR1Fraction = r1.fraction + string(max(0, (int)fraction.length() - (int)r1.fraction.length()), '0');
+
+                return (paddedFraction > paddedR1Fraction);
+            }
+        }
+    }
 }
 int main() {
-    BigReal r1("+12.0011133111");
-    BigReal r2("+23.77");
-    cout<<r1+r2;
+    BigReal r1("-2220000000000000000000000000000000000000.77");
+    BigReal r2("+222.7788888888888888888888888888888888888888888888888888888888888888888888");
+    if(r1>r2){
+        cout<<"R1 > R2";
+    }
+    else if(r1<r2){
+        cout<<"R2 > R1";
+    }
+    else if(r1 == r2) cout<<"R1 = R2";
     return 0;
 }
