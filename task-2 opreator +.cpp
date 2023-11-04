@@ -10,6 +10,7 @@ public:
     bool isValidReal(string real);
     BigReal(string real);
     string operator +(const BigReal & r1);
+    string operator -(BigReal& r1);
     bool operator ==(const BigReal & r1);
     bool operator <(const BigReal & r1);
     bool operator >(const BigReal &r1);
@@ -62,44 +63,167 @@ string BigReal::operator+(const BigReal &r1) {
 
     string result2,result1;
     int carry = 0;
+    if(sign==r1.sign)
+    {
+        // Handle the fractional part
+        for (int i = maxFracLen - 1; i >= 0; --i) {
+            int digit1 = (i < frac1) ? r1.fraction[i] - '0' : 0;
+            int digit2 = (i < frac2) ? fraction[i] - '0' : 0;
+            int sum = digit1 + digit2 + carry;
 
-    // Handle the fractional part
-    for (int i = maxFracLen - 1; i >= 0; --i) {
-        int digit1 = (i < frac1) ? r1.fraction[i] - '0' : 0;
-        int digit2 = (i < frac2) ? fraction[i] - '0' : 0;
-        int sum = digit1 + digit2 + carry;
-
-        if (sum < 10) {
-            result2.insert(result2.begin(), sum + '0');
-            carry = 0;
-        } else {
-            result2.insert(result2.begin(), (sum - 10) + '0');
-            carry = 1;
+            if (sum < 10) {
+                result2.insert(result2.begin(), sum + '0');
+                carry = 0;
+            } else {
+                result2.insert(result2.begin(), (sum - 10) + '0');
+                carry = 1;
+            }
         }
-    }
 
-    // Handle the integer part
-    for (int i = maxIntLen - 1; i >= 0; --i) {
-        int digit3 = (i < int1) ? r1.integer[i] - '0' : 0;
-        int digit4 = (i < int2) ? integer[i] - '0' : 0;
-        int sum1 = digit3 + digit4 + carry;
+        // Handle the integer part
+        for (int i = maxIntLen - 1; i >= 0; --i) {
+            int digit3 = (i < int1) ? r1.integer[i] - '0' : 0;
+            int digit4 = (i < int2) ? integer[i] - '0' : 0;
+            int sum1 = digit3 + digit4 + carry;
 
-        if (sum1 < 10) {
-            result1.insert(result1.begin(), sum1 + '0');
-            carry = 0;
-        } else {
-            result1.insert(result1.begin(), (sum1 - 10) + '0');
-            carry = 1;
+            if (sum1 < 10) {
+                result1.insert(result1.begin(), sum1 + '0');
+                carry = 0;
+            } else {
+                result1.insert(result1.begin(), (sum1 - 10) + '0');
+                carry = 1;
+            }
         }
+        if (carry) {
+            result1.insert(result1.begin(), '1');
+        }
+        // Determine the sign
+        if (sign == '-' && r1.sign == '-') {
+            result1.insert(result1.begin(), '-');
+        }
+        return ( result1+'.'+result2);
     }
-    if (carry) {
-        result1.insert(result1.begin(), '1');
+
+    else
+    {
+        if(operator>(r1))
+        {
+            // Handle the fractional part
+            for (int i = maxFracLen - 1; i >= 0; --i) {
+                int digit1 = (i < frac1) ? r1.fraction[i] - '0' : 0;
+                int digit2 = (i < frac2) ? fraction[i] - '0' : 0;
+                int sum = digit1 - digit2 - carry;
+
+                if (sum < 10) {
+                    result2.insert(result2.begin(), sum + '0');
+                    carry = 0;
+                } else {
+                    result2.insert(result2.begin(), (sum + 10) + '0');
+                    carry = 1;
+                }
+            }
+
+            // Handle the integer part
+            for (int i = maxIntLen - 1; i >= 0; --i) {
+                int digit3 = (i < int1) ? r1.integer[i] - '0' : 0;
+                int digit4 = (i < int2) ? integer[i] - '0' : 0;
+                int sum1 = digit3 - digit4 - carry;
+
+                if (sum1 > 0) {
+                    result1.insert(result1.begin(), sum1 + '0');
+                    carry = 0;
+                } else {
+                    result1.insert(result1.begin(), (sum1 + 10) + '0');
+                    carry = 1;
+                }
+            }
+            // Determine the sign
+            if (sign == '-') {
+                result1.insert(result1.begin(), '-');
+            }
+            return ( result1+'.'+result2);
+        }
+       /* else if(operator<(r1))
+        {
+
+        }*/
     }
-    // Determine the sign
-    if (sign == '-' && r1.sign == '-') {
-        result1.insert(result1.begin(), '-');
+
+}
+
+string BigReal::operator-(BigReal &r1) {
+    //padding the fraction part to let them be the same size
+    while(fraction.size() < r1.fraction.size())
+        fraction+='0';
+    while(r1.fraction.size() < fraction.size())
+        r1.fraction += '0';
+
+    //padding the fraction part to let them be the same size
+    while(integer.size() < r1.integer.size())
+        fraction+='0';
+    while(r1.integer.size() < integer.size())
+        r1.fraction += '0';
+
+    //creating 2 strings to store the integer and the fraction parts
+    string integerPart, fractionPart;
+    //creating integers to store the digits of the result and the carry
+    int carry = 0, fractionSum = 0, integerSum = 0;
+    if(operator>(r1)) {
+        //looping over the digits to subtract each digit in the fraction part
+        for (int i = fraction.size() - 1; i >= 0; --i) {
+            fractionSum = fraction[i] - r1.fraction[i] - carry - '0' - '0';
+            if (fractionSum >= 0) {
+                fractionPart.insert(fractionPart.begin(), fractionSum + '0');
+                carry = 0;
+            } else {
+                fractionSum += 10;
+                fractionPart.insert(fractionPart.begin(), fractionSum + '0');
+                carry = 1;
+            }
+        }
+        //looping over the digits to subtract each digit in the integer part
+        for (int i = integer.size() - 1; i >= 0; --i) {
+            integerSum = integer[i] - r1.integer[i] - carry - '0';
+            if (integerSum >= 0) {
+                integerPart.insert(integerPart.begin(), integerSum);
+                carry = 0;
+            } else {
+                integerSum += 10;
+                integerPart.insert(integerPart.begin(), integerSum);
+                carry = 1;
+            }
+        }
+        string answer = sign + integerPart + '.' + fractionPart;
     }
-    return ( result1+'.'+result2);
+    else if(operator<(r1))
+    {
+        //looping over the digits to subtract each digit in the fraction part
+        for (int i = r1.fraction.size() - 1; i >= 0; --i) {
+            fractionSum = r1.fraction[i] - fraction[i] - carry - '0';
+            if (fractionSum >= 0) {
+                fractionPart.insert(fractionPart.begin(), fractionSum);
+                carry = 0;
+            } else {
+                fractionSum += 10;
+                fractionPart.insert(fractionPart.begin(), fractionSum);
+                carry = 1;
+            }
+        }
+        //looping over the digits to subtract each digit in the integer part
+        for (int i = r1.integer.size() - 1; i >= 0; --i) {
+            integerSum = r1.integer[i] - integer[i] - carry - '0';
+            if (integerSum >= 0) {
+                integerPart.insert(integerPart.begin(), integerSum);
+                carry = 0;
+            } else {
+                integerSum += 10;
+                integerPart.insert(integerPart.begin(), integerSum);
+                carry = 1;
+            }
+        }
+        string answer = r1.sign + integerPart + '.' + fractionPart;
+    }
+    return answer;
 }
 bool BigReal::operator==(const BigReal &r1) {
     if (sign == r1.sign) {
@@ -196,6 +320,8 @@ bool BigReal::operator>(const BigReal &r1)
 int main() {
     BigReal r1("-2220000000000000000000000000000000000000.77");
     BigReal r2("+222.7788888888888888888888888888888888888888888888888888888888888888888888");
+    BigReal r3("22");
+    BigReal r4("11");
     if(r1>r2){
         cout<<"R1 > R2";
     }
@@ -203,5 +329,6 @@ int main() {
         cout<<"R2 > R1";
     }
     else if(r1 == r2) cout<<"R1 = R2";
+    cout<<endl<<r3.operator-(r4)<<' '<<"msh sha8al";
     return 0;
 }
