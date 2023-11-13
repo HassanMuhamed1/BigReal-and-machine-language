@@ -27,6 +27,7 @@ public:
     void write_register_address(int operand1,int operand2,Memory mem);
     void write_register(int operand1,int operand2);
     void copy_register(string z);
+    void Add1(int op1 , string op2 , bool carryFlag);
 
 };
 
