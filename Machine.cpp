@@ -3,29 +3,7 @@
 #include "Machine.h"
 using namespace std;
 
-/*void Instructions::Load1(int operand1 , int operand2) {
 
-}
-void Instructions::Load2() {
-
-}
-void Instructions::Add1() {
-
-}
-void Instructions::Add2() {
-
-}
-void Instructions::Store1()  {
-
-}
-void Instructions::Store2() {
-
-}
-void Instructions::jump() {
-
-}
-void Instructions::Halt() {
-}*/
 /*void Machine ::fetchStep(string & filename){
     fstream instructionFile ("./" + filename);
     string line;
@@ -42,6 +20,11 @@ void Register::write_register_address(int operand1, int operand2, Memory mem) {
 void Register::write_register(int operand1, int operand2) {
     arr[operand1] = operand2;
 }
+
+void Register::copy_register(int operand1) {
+    arr[operand1 %10] = arr[(operand1/10)%10];
+}
+
 int Memory::read(int Address) {
     return Memo[Address];
 }
@@ -75,13 +58,15 @@ void Machine ::executeStep(string &inst){
             break;
         case 3:
             if(op1 != 00){
-
+                memory.write(op2 , registers.get_register(op1));
             }
             else{
 
             }
             break;
+            // 4 0 A4
         case 4 :
+            registers.copy_register(op1);
             break;
         case 5 :
             break;
