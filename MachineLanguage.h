@@ -1,8 +1,15 @@
-#ifndef TASK_3_MACHINE_H
-#define TASK_3_MACHINE_H
+#ifndef UNTITLED1_MACHINELANGUAGE_H
+#define UNTITLED1_MACHINELANGUAGE_H
+
+
+//class MachineLanguage {
+//
+//};
 #include <bits/stdc++.h>
 #include <string>
 using namespace std;
+
+
 
 class Memory{
 protected:
@@ -10,7 +17,7 @@ protected:
 public:
     Memory();
     int read(int Address);
-    void write(int Address,int Value);
+    void write(int Address,int Value );
 };
 class Register{
 protected:
@@ -19,18 +26,21 @@ public:
     int get_register(int operand1);
     void write_register_address(int operand1,int operand2,Memory mem);
     void write_register(int operand1,int operand2);
-    void copy_register(int operand1);
+    void copy_register(string z);
+
 };
-class Machine{
+
+
+class MachineLanguage {
 protected:
     int programCounter;
     Register registers;
     Memory memory;
 public:
-    Machine():programCounter(0){}
+    MachineLanguage():programCounter(0){}
     void executeStep(string& s);
-    void fetchStep(string& s);
+//    void fetchStep(string& s);
 };
 
 
-#endif //TASK_3_MACHINE_H
+#endif //UNTITLED1_MACHINELANGUAGE_H
