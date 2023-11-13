@@ -1,7 +1,33 @@
 #include "MachineLanguage.h"
 using namespace std;
 
+void Register::Add1 (int op1 , string op2 , bool carryFlag) {
+    // Get the values from registers S and T
+    int r1 ,r2;
+    r1 = stoi(string(1,op2[2]) , nullptr ,16);
+    r2 = stoi(string(1,op2[3]) , nullptr ,16);
 
+    int valueS = arr[r1];
+    int valueT = arr[r2];
+
+    // Convert the values to bitsets with 8 bits
+    bitset<8> bsS(valueS);
+    bitset<8> bsT(valueT);
+
+    // Perform the binary addition
+    bitset<9> bsSum = bsS.to_ulong() + bsT.to_ulong();
+
+    // Check for carry
+    if (bsSum[8] == 1) {
+        bsSum[8] = 0;  // Clear the carry bit
+        carryFlag = true;
+    } else {
+        carryFlag = false;
+    }
+
+    // Store the result in register R
+    write_register(op1, bsSum.to_ulong());
+}
 
 int Register::get_register(int operand1) {
     return arr[operand1] ;
@@ -67,13 +93,15 @@ void MachineLanguage ::executeStep(string &inst){
             registers.copy_register(z);
             break;
         case 5 :
+            bool CaryFlag = false;
+            registers.Add1(op1 , z ,CaryFlag );
             break;
-        case 11:
-            break;
-        case 12 :
-            break;
-        default:
-            cout<<"wrong operation \n";
+//        case 11:
+//            break;
+//        case 12 :
+//            break;
+//        default:
+//            cout<<"wrong operation \n";
     }
 
 }
