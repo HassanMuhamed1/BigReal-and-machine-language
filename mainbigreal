@@ -1,0 +1,12 @@
+#include <bits/stdc++.h>
+#include "Bigreal.h"
+#include "Bigreal.cpp"
+#include<string>
+using namespace std;
+int main() {
+    BigReal r1("+12.751524514");
+    BigReal r2("+5.157824");
+    cout<<r1-r2<<endl;
+    cout<<r1+r2<<endl;
+    return 0;
+}
