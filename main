@@ -6,70 +6,77 @@ MachineLanguage machine;
 int main() {
     int choice;
     string filename, fullfilename;
-        cout << "Enter 1 to input a file and execute the file\n";
-        cout << "Enter 2 to input instruction and execute it\n";
-        cout << "Enter 3 to display the memory, register, and programCounter\n";
-        cout<<"Enter 0 to exit\n";
-        cin >> choice;
-        cin.ignore();
-        if (choice == 1) {
-            cout << "Enter the file name: ";
-            cin >> filename;
-//            fullfilename = filename+".txt" ;
-            ifstream InstructionsFile(fullfilename);
+    cout << "Enter 1 to input a file and execute the file\n";
+    cout << "Enter 2 to input instruction and execute it\n";
+    cout << "Enter 3 to display the memory, register, and programCounter\n";
+    cout<<"Enter 0 to exit\n";
+    cin >> choice;
+    cin.ignore();
+    if (choice == 1) {
+        cout << "Enter the file name: ";
+        cin >> filename;
+        fullfilename = filename+".txt" ;
+        ifstream InstructionsFile(fullfilename);
 
-            if (!InstructionsFile) {
-                cout << "Failed to open file: " << fullfilename << '\n';
-
-            }
-
-            string line;
-            while (getline(InstructionsFile, line))
-            {
-                machine.isValid(line);
-                machine.executeStep(line);
-            }
+        if (!InstructionsFile) {
+            cout << "Failed to open file: " << fullfilename << '\n';
         }
-        else if (choice == 2){
-            string instruction;
-            cout<<"enter the instruction: ";
-            getline(cin , instruction);
-            if(machine.isValid(instruction)){
-                machine.executeStep(instruction);
+
+        string line;
+        while (getline(InstructionsFile, line))
+        {
+            if(machine.isValid(line)){
+                machine.executeStep(line);
             }
             else{
                 cout<<"This instruction not Valid !"<<endl;
             }
+
         }
-        else if (choice == 3){
-            cout << "Enter the file name to execute it and Display: ";
-            cin >> filename;
-            fullfilename = filename+".txt" ;
-            ifstream InstructionsFile(fullfilename);
+    }
+    else if (choice == 2){
+        string instruction;
+        cout<<"enter the instruction: ";
+        getline(cin , instruction);
+        if(machine.isValid(instruction)){
+            machine.executeStep(instruction);
+        }
+        else{
+            cout<<"This instruction not Valid !"<<endl;
+        }
+    }
+    else if (choice == 3){
+        cout << "Enter the file name to execute it and Display: ";
+        cin >> filename;
+        fullfilename = filename+".txt" ;
+        ifstream InstructionsFile(fullfilename);
 
-            if (!InstructionsFile) {
-                cout << "Failed to open file: " << fullfilename << '\n';
-            }
+        if (!InstructionsFile) {
+            cout << "Failed to open file: " << fullfilename << '\n';
+        }
 
-            string line;
-            while (getline(InstructionsFile, line))
-            {
-                machine.isValid(line);
+        string line;
+        while (getline(InstructionsFile, line))
+        {
+            if(machine.isValid(line)){
                 machine.executeStep(line);
-
             }
-
-            for (int i = 0; i < 16; i++)
-            {
-                cout << "Register " << i << ":" <<  (::hex)<<machine.registers.get_register(i)  << '\n';
+            else{
+                cout<<"This instruction is not valid!"<<endl;
             }
-
-            for (int i = 0; i < 256; i++)
-            {
-                cout << "Memory : " << i << " "<< "Address :" << (i%2==0?(::dec):(::hex))<< machine.memory.read(i) << '\n';
-            }
-            cout<<'\n'<<"program counter is: "<<machine.programCounter/2<<endl;
         }
+
+        for (int i = 0; i < 16; i++)
+        {
+            cout << "Register " << i << ":" <<  (::hex)<<machine.registers.get_register(i)  << '\n';
+        }
+
+        for (int i = 0; i < 256; i++)
+        {
+            cout << "Memory : " << i << " "<< "Address :" << (i%2==0?(::dec):(::hex))<< machine.memory.read(i) << '\n';
+        }
+        cout<<'\n'<<"program counter is: "<<machine.programCounter/2<<endl;
+    }
 
     return 0;
 }
