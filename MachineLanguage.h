@@ -10,6 +10,7 @@ public:
     int read(int Address);
     void write(int Address,int Value );
 };
+
 class Register{
 public:
     int arr[16] = {0};
@@ -19,6 +20,7 @@ public:
     void copy_register(string z);
     void Add1(int op1 , string op2 );
 };
+
 class MachineLanguage {
 protected:
     string fileName = "instructions.txt";
