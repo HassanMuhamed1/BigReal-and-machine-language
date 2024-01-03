@@ -20,11 +20,16 @@ BigReal ::BigReal(string real) {
         else if(real[0] == '+'){
             sign = '+';
         }
-        if(real[0]=='+'||real[0]=='-'){ integer = real.substr(1, real.find('.')-1); }
-        else{integer = real.substr(0, real.find('.'));}
+        if(real[0]=='+'||real[0]=='-'){
+            integer = real.substr(1, real.find('.')-1);
+        }
+        else{
+            // if sign there no exist here
+            integer = real.substr(0, real.find('.'));
+        }
         fraction = real.substr(real.find('.')+1, real.size()-1);
     }
-    if(real.find('.')>real.size()){
+    if(real.find('.')>real.size()){// real.find will return any number if will find no point
         fraction='0';
     }
     if(integer.empty()){
